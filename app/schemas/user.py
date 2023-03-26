@@ -3,15 +3,21 @@ User schema
 """
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, EmailStr, PositiveInt, Field
+from pydantic import BaseModel, EmailStr, Field, PositiveInt
 from app.utils.utils import password_regex
 
 
-class UserAuth(BaseModel):
+class UserID(BaseModel):
     """
     Class for User Auth based on Pydantic Base Model.
     """
     id: PositiveInt = Field(..., title='ID', description='ID of the User')
+
+
+class UserBasic(BaseModel):
+    """
+    Class for UserBasic based on Pydantic Base Model.
+    """
     username: str = Field(
         ..., title='Username',
         description='Username to identify the user', min_length=4,
@@ -21,7 +27,41 @@ class UserAuth(BaseModel):
         description='Preferred e-mail address of the User')
 
 
-class UserInDB(BaseModel):
+class UserPassword(BaseModel):
+    """
+    User class for its password based on Pydantic Base Model.
+    """
+    password: str = Field(
+        default=..., title='Password', min_length=8, max_length=14,
+        description='Password of the User', regex=password_regex)
+
+
+class UserAuth(UserBasic, UserID):
+    """
+    Class for User Auth that inherits from UserBasic and UserID.
+    """
+
+
+class UserCreate(UserPassword, UserBasic):
+    """
+    User base class that inherits from UserPassword and UserBasic.
+    """
+
+    class Config:
+        """
+        Config class for User
+        """
+        orm_mode: bool = True
+        schema_extra: dict[str, dict] = {
+            "example": {
+                "username": "username",
+                "email": "example@mail.com",
+                "password": "Hk7pH9*35Fu&3U"
+            }
+        }
+
+
+class UserValidation(BaseModel):
     """
     Class for User attributes that are automatically created in the
      database based on Pydantic Base Model.
@@ -32,6 +72,12 @@ class UserInDB(BaseModel):
     is_active: bool = Field(
         default=True, title='Is active?',
         description='True if the user is active; otherwise false')
+
+
+class UserInDB(UserValidation):
+    """
+    User in DB that inherits from UserValidation.
+    """
     created_at: datetime = Field(
         default_factory=datetime.now, title='Created at',
         description='Time the User was created')
@@ -40,14 +86,11 @@ class UserInDB(BaseModel):
         description='Time the User was updated')
 
 
-class User(UserInDB, UserAuth):
+class User(UserInDB, UserCreate, UserID):
     """
-    Request class for creating User that inherits from UserInDB and
-     UserAuth.
+    Request class for creating User that inherits from UserInDB,
+     UserCreate and UserID.
     """
-    password: str = Field(
-        ..., title='Password', description='Password of the User',
-        min_length=8, max_length=14, regex=password_regex)
 
     class Config:
         """
@@ -63,10 +106,12 @@ class User(UserInDB, UserAuth):
                 "is_superuser": False,
                 "is_active": True,
                 "created_at": datetime.utcnow(),
-                "updated_at": datetime.utcnow()}}
+                "updated_at": datetime.utcnow()
+            }
+        }
 
 
-class UserResponse(UserInDB, UserAuth):
+class UserCreateResponse(UserValidation, UserAuth):
     """
     Response class for creating User that inherits from UserInDB and
      UserAuth.
@@ -83,9 +128,32 @@ class UserResponse(UserInDB, UserAuth):
                 "username": "username",
                 "email": "example@mail.com",
                 "is_superuser": False,
+                "is_active": True
+            }
+        }
+
+
+class UserResponse(UserInDB, UserAuth):
+    """
+    Response class for User that inherits from UserInDB and UserAuth.
+    """
+
+    class Config:
+        """
+        Config class for UserResponse
+        """
+        orm_mode: bool = True
+        schema_extra: dict[str, dict] = {
+            "example": {
+                "id": 1,
+                "username": "username",
+                "email": "example@mail.com",
+                "is_superuser": False,
                 "is_active": True,
                 "created_at": datetime.utcnow(),
-                "updated_at": datetime.utcnow()}}
+                "updated_at": datetime.utcnow()
+            }
+        }
 
 
 class UserUpdate(BaseModel):
@@ -107,23 +175,26 @@ class UserUpdate(BaseModel):
         """
         Config class for UserUpdate
         """
+        orm_mode: bool = True
         schema_extra: dict[str, dict] = {
             "example": {
                 "username": "username",
                 "email": "example@mail.com",
-                "password": "Hk7pH9*35Fu&3U"}}
+                "password": "Hk7pH9*35Fu&3U"
+            }
+        }
 
 
-class UserPassword(BaseModel):
+class UserNewPassword(BaseModel):
     """
-    User Password class that inherits from Pydantic Base Model.
+    User New Password class that inherits from Pydantic Base Model.
     """
     password: str = Field(
         ..., title='Hashed Password', min_length=40,
         description='Hashed Password of the User')
 
 
-class UserUpdateResponse(UserInDB, UserPassword, UserAuth):
+class UserUpdateResponse(UserInDB, UserNewPassword, UserAuth):
     """
     Response class for updating User that inherits from UserInDB,
      UserPassword and UserAuth.
@@ -143,4 +214,6 @@ class UserUpdateResponse(UserInDB, UserPassword, UserAuth):
                 "is_active": True,
                 "is_superuser": False,
                 "created_at": datetime.utcnow(),
-                "updated_at": datetime.utcnow()}}
+                "updated_at": datetime.utcnow()
+            }
+        }

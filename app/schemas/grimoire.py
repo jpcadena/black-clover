@@ -6,7 +6,7 @@ from enum import Enum
 
 class Grimoire(str, Enum):
     """
-    Grimoire class that inherits from built-in Enum
+    Grimoire cover class that inherits from built-in Enum
     """
     SINCERITY: str = 'Sinceridad'
     HOPE: str = 'Esperanza'

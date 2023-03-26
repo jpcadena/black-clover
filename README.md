@@ -21,7 +21,7 @@ height="80">
 <h3 align="center">black-clover</h3>
 
   <p align="center">
-    Description for Black clover
+    Black Clover RESTful API project based on FastAPI.
     <br />
     <a href="https://github.com/jpcadena/black-clover"><strong>Explore the docs »</strong></a>
     <br />
@@ -127,7 +127,7 @@ Applications for admission must indicate at least the following information of t
 ### Prerequisites
 
 * [Python 3.10+][Python-docs]
-* 
+
 ### Installation
 
 1. Clone the **repository**

@@ -4,7 +4,6 @@ App utils script
 import logging
 import math
 import random
-import string
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Optional
@@ -13,6 +12,7 @@ from jose import jwt
 from pydantic import EmailStr, AnyHttpUrl
 from app.core import config
 from app.core.decorators import with_logging, benchmark
+from app.schemas.grimoire import Grimoire
 from app.utils.email_notifications import read_template_file, send_email
 from app.utils.metadata import read_json_file, write_json_file, \
     modify_json_data
@@ -26,13 +26,11 @@ password_regex: str = r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?" \
 sub_regex: str = r'username:(?!0)\d+'
 
 
-def generate_unique_id() -> str:
+def generate_grimoire():
     """
-    Generates an unique identifier
-    :return: Alphanumeric ID
-    :rtype: str
+    Generate a random grimoire value from the Grimoire enum.
     """
-    return ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+    return random.choice(list(Grimoire))
 
 
 async def send_test_email(

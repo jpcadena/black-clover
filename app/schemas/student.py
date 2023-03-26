@@ -3,9 +3,11 @@ Student schema
 """
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, EmailStr, Field, PositiveInt
+from pydantic import BaseModel, Field, PositiveInt
+from app.schemas.grimoire import Grimoire
 from app.schemas.magic_affinity import MagicAffinity
-from app.utils.utils import password_regex
+from app.schemas.user import UserCreate, UserResponse, User, UserCreateResponse
+from app.utils.utils import generate_grimoire
 
 
 class StudentID(BaseModel):
@@ -15,242 +17,85 @@ class StudentID(BaseModel):
     id: PositiveInt = Field(..., title='ID', description='ID of the Student')
 
 
-class StudentUpdatedAt(BaseModel):
+class StudentBase(BaseModel):
     """
-    UpdatedAt class for Student based on Pydantic Base Model.
-    """
-    updated_at: Optional[datetime] = Field(
-        default=None, title='Updated at',
-        description='Time the Student was updated')
-
-
-class StudentBaseAuth(BaseModel):
-    """
-    Student Base Auth class based on Pydantic Base Model
-    """
-    username: str = Field(
-        ..., title='Studentname',
-        description='Studentname to identify the user', min_length=4,
-        max_length=15)
-    email: EmailStr = Field(
-        ..., title='Email',
-        description='Preferred e-mail address of the Student')
-
-
-class StudentName(BaseModel):
-    """
-    Student class for names attributes based on Pydantic Base Model.
+    Student request class based on Pydantic Base Model.
     """
     first_name: str = Field(
-        ..., title='First name', description='First name(s) of the Student')
+        ..., title='First name', description='First name(s) of the Student',
+        max_length=20)
     last_name: str = Field(
-        ..., title='Last name', description='Last name(s) of the Student')
-
-
-class StudentBase(StudentName, StudentBaseAuth):
-    """
-    Base class for Student that inherits from StudentAuth.
-    """
-
-
-class StudentAuth(StudentBaseAuth, StudentID):
-    """
-    Student Auth that inherits from StudentID.
-    """
-
-    class Config:
-        """
-        Config class for StudentAuth
-        """
-        schema_extra: dict[str, dict] = {
-            "example": {
-                "id": 1,
-                "username": "username",
-                "email": "example@mail.com"}}
-
-
-class StudentOptional(BaseModel):
-    """
-    Student class with optional attributes based on Pydantic Base Model.
-    """
+        ..., title='Last name', description='Last name(s) of the Student',
+        max_length=20)
+    identification: str = Field(
+        ..., title='Identification',
+        description='Alphanumeric Identification of max 10 characters',
+        max_length=10, regex='^[a-zA-Z0-9]{1,10}$')
+    age: PositiveInt = Field(
+        ..., title='Age', description='Age of the Student', max_digits=2,
+        le=99)
     magic_affinity: MagicAffinity = Field(
         default=MagicAffinity.LIGHT, title='MagicAffinity',
-        description='MagicAffinity of the student')
+        description='Magic affinity of the student')
 
 
-class StudentCreate(StudentOptional, StudentBase):
+class StudentCreate(StudentBase):
     """
-    Request class for creating Student that inherits from StudentOptional
-     and StudentBase.
+    Student Create class that inherits from StudentBase.
     """
-    password: str = Field(
-        ..., title='Password', description='Password of the Student',
-        min_length=8, max_length=14, regex=password_regex)
+    user: UserCreate = Field(
+        ..., title='User Create', description='User basic information')
 
     class Config:
         """
         Config class for StudentCreate
         """
-        schema_extra: dict[str, dict] = {
-            "example": {
-                "username": "username",
-                "email": "example@mail.com",
-                "first_name": "Some",
-                "last_name": "Example",
-                "password": "Hk7pH9*35Fu&3U",
-                "magic_affinity": MagicAffinity.LIGHT}}
-
-
-class StudentSuperCreate(StudentCreate):
-    """
-    Class to create a super_user that inherits from StudentCreate.
-    """
-    is_superuser: bool = Field(
-        default=True, title='Is super user?',
-        description='True if the user is super user; otherwise false')
-
-    class Config:
-        """
-        Config class for StudentSuperCreate
-        """
-        schema_extra: dict[str, dict] = {
-            "example": {
-                "username": "username",
-                "email": "example@mail.com",
-                "first_name": "Some",
-                "last_name": "Example",
-                "password": "Hk7pH9*35Fu&3U",
-                "magic_affinity": MagicAffinity.LIGHT,
-                "is_superuser": True}}
-
-
-class StudentCreateResponse(StudentBase, StudentID):
-    """
-    Response class for creating Student that inherits from StudentID and
-     StudentBase.
-    """
-
-    class Config:
-        """
-        Config class for StudentCreateResponse
-        """
         orm_mode: bool = True
         schema_extra: dict[str, dict] = {
             "example": {
-                "id": 1,
-                "username": "username",
-                "email": "example@mail.com",
-                "first_name": "Some",
-                "last_name": "Example"}}
+                "first_name": "Yuno",
+                "last_name": "Grinberryall",
+                "identification": "12ab34cd5e",
+                "age": 17,
+                "magic_affinity": MagicAffinity.WIND,
+                "user": {
+                    "username": "yuno123",
+                    "email": "yuno_grinberryall@mail.com",
+                    "password": "Password1.-"
+                }
+            }
+        }
 
 
-class StudentUpdate(BaseModel):
+class StudentApproved(StudentBase):
     """
-    Request class for updating Student based on Pydantic Base Model.
+    Student approved request class that inherits from StudentBase.
     """
-    username: Optional[str] = Field(
-        default=None, title='Studentname',
-        description='Studentname to identify the user',
-        min_length=4, max_length=15)
-    email: Optional[EmailStr] = Field(
-        default=None, title='Email',
-        description='Preferred e-mail address of the Student')
-    first_name: Optional[str] = Field(
-        default=None, title='First name',
-        description='First name(s) of the Student')
-    last_name: str = Field(
-        default=None, title='Last name',
-        description='Last name(s) of the Student')
-    password: Optional[str] = Field(
-        default=None, title='New Password', min_length=8, max_length=14,
-        description='New Password of the Student', regex=password_regex)
-    magic_affinity: MagicAffinity = Field(
-        default=MagicAffinity.LIGHT, title='MagicAffinity',
-        description='MagicAffinity of the student')
-
-    class Config:
-        """
-        Config class for StudentUpdate
-        """
-        schema_extra: dict[str, dict] = {
-            "example": {
-                "username": "username",
-                "email": "example@mail.com",
-                "first_name": "Some",
-                "last_name": "Example",
-                "password": "Hk7pH9*35Fu&3U",
-                "magic_affinity": MagicAffinity.LIGHT}}
+    grimoire: Grimoire = Field(
+        default_factory=generate_grimoire, title='Grimoire',
+        description='Random Grimoire assigned to the student')
 
 
-class StudentInDB(StudentUpdatedAt, BaseModel):
+class StudentInDB(BaseModel):
     """
     Class for Student attributes that are automatically created in the
      database based on Pydantic Base Model.
     """
-    is_active: bool = Field(
-        ..., title='Is active?',
-        description='True if the user is active; otherwise false')
-    is_superuser: bool = Field(
-        ..., title='Is super user?',
-        description='True if the user is super user; otherwise false')
     created_at: datetime = Field(
         default_factory=datetime.now, title='Created at',
         description='Time the Student was created')
+    updated_at: Optional[datetime] = Field(
+        default=None, title='Updated at',
+        description='Time the Student was updated')
 
 
-class StudentPassword(BaseModel):
+class Student(StudentInDB, StudentApproved, StudentID):
     """
-    Student Password class that inherits from Pydantic Base Model.
+    Student class that inherits from StudentInDB, StudentApproved and
+     StudentID.
     """
-    password: str = Field(
-        ..., title='Hashed Password', min_length=40,
-        description='Hashed Password of the Student')
-
-
-class StudentUpdateResponse(StudentInDB, StudentOptional, StudentPassword,
-                            StudentName, StudentAuth):
-    """
-    Response class for updating Student that inherits from StudentInDB,
-     StudentOptional, StudentPassword, StudentName and StudentAuth.
-    """
-
-    class Config:
-        """
-        Config class for StudentUpdateResponse
-        """
-        orm_mode: bool = True
-        schema_extra: dict[str, dict] = {
-            "example": {
-                "id": 1,
-                "username": "username",
-                "email": "example@mail.com",
-                "first_name": "Some",
-                "last_name": "Example",
-                "password": "Hk7pH9*Hk7pH9*35Fu&3UHk7pH9*35Fu&3U35Fu&3U",
-                "magic_affinity": MagicAffinity.LIGHT,
-                "is_active": True,
-                "is_superuser": False,
-                "created_at": datetime.utcnow(),
-                "updated_at": datetime.utcnow()}}
-
-
-class Student(StudentUpdatedAt, StudentOptional, StudentBase):
-    """
-    Student class that inherits from StudentUpdatedAt, StudentRelationship,
-     StudentCreate and StudentID.
-    """
-    password: str = Field(
-        ..., title='Hashed Password', min_length=40,
-        description='Hashed Password of the Student')
-    is_active: bool = Field(
-        default=True, title='Is active?',
-        description='True if the user is active; otherwise false')
-    is_superuser: bool = Field(
-        default=False, title='Is super user?',
-        description='True if the user is super user; otherwise false')
-    created_at: datetime = Field(
-        default_factory=datetime.now, title='Created at',
-        description='Time the Student was created')
+    user: User = Field(
+        ..., title='User', description='User basic information')
 
     class Config:
         """
@@ -260,38 +105,128 @@ class Student(StudentUpdatedAt, StudentOptional, StudentBase):
         schema_extra: dict[str, dict] = {
             "example": {
                 "id": 1,
-                "username": "username",
-                "email": "example@mail.com",
-                "first_name": "Some",
-                "last_name": "Example",
-                "password": "Hk7pH9*Hk7pH9*35Fu&3UHk7pH9*35Fu&3U35Fu&3U",
-                "magic_affinity": MagicAffinity.LIGHT,
-                "is_active": True,
-                "is_superuser": False,
+                "first_name": "Yuno",
+                "last_name": "Grinberryall",
+                "identification": "12ab34cd5e",
+                "age": 17,
+                "magic_affinity": MagicAffinity.WIND,
+                "grimoire": Grimoire.GOOD_FORTUNE,
                 "created_at": datetime.utcnow(),
-                "updated_at": datetime.utcnow()}}
+                "updated_at": datetime.utcnow(),
+                "user": {
+                    "id": 1,
+                    "username": "yuno123",
+                    "email": "yuno_grinberryall@mail.com",
+                    "password": "Password1.-",
+                    "is_superuser": False,
+                    "is_active": True,
+                    "created_at": datetime.utcnow(),
+                    "updated_at": datetime.utcnow()
+                }
+            }
+        }
 
 
-class StudentResponse(StudentInDB, StudentOptional, StudentBase, StudentID):
+class StudentResponse(StudentInDB, StudentApproved, StudentID):
     """
-    Response for Student class that inherits from StudentRelationship,
-     StudentInDB, StudentOptional, StudentCreateResponse.
+    Class for Student Response that inherits from StudentInDB,
+     StudentApproved and StudentID.
     """
+    user: UserResponse = Field(
+        ..., title='User Response', description='User basic information')
 
     class Config:
         """
         Config class for StudentResponse
         """
-        orm_mode: bool = True
-        schema_extra: dict[str, dict] = {
+        orm_mode = True
+        schema_extra = {
             "example": {
                 "id": 1,
-                "username": "username",
-                "email": "example@mail.com",
-                "first_name": "Some",
-                "last_name": "Example",
-                "magic_affinity": MagicAffinity.LIGHT,
-                "is_active": True,
-                "is_superuser": False,
+                "first_name": "Yuno",
+                "last_name": "Grinberryall",
+                "identification": "12ab34cd5e",
+                "age": 17,
+                "magic_affinity": MagicAffinity.WIND,
+                "grimoire": Grimoire.GOOD_FORTUNE,
                 "created_at": datetime.utcnow(),
-                "updated_at": datetime.utcnow()}}
+                "updated_at": datetime.utcnow(),
+                "user": {
+                    "id": 1,
+                    "username": "yuno123",
+                    "email": "yuno_grinberryall@mail.com",
+                    "is_superuser": False,
+                    "is_active": True,
+                    "created_at": datetime.utcnow(),
+                    "updated_at": datetime.utcnow()
+                }
+            }
+        }
+
+
+class StudentCreateResponse(StudentCreate):
+    """
+    Response class for creating Student that inherits from
+     StudentCreate.
+    """
+    user: UserCreateResponse = Field(
+        ..., title='User Response', description='User basic information')
+
+    class Config:
+        """
+        Config class for StudentCreateResponse
+        """
+        orm_mode: bool = True
+        schema_extra = {
+            "example": {
+                "id": 1,
+                "first_name": "Yuno",
+                "last_name": "Grinberryall",
+                "identification": "12ab34cd5e",
+                "age": 17,
+                "magic_affinity": MagicAffinity.WIND,
+                "user": {
+                    "id": 1,
+                    "username": "yuno123",
+                    "email": "yuno_grinberryall@mail.com",
+                    "is_superuser": False,
+                    "is_active": True
+                }
+            }
+        }
+
+
+class StudentUpdate(BaseModel):
+    """
+    Request class for updating Student based on Pydantic Base Model.
+    """
+    first_name: Optional[str] = Field(
+        default=None, title='First name',
+        description='First name(s) of the Student', max_length=20)
+    last_name: Optional[str] = Field(
+        default=None, title='Last name',
+        description='Last name(s) of the Student', max_length=20)
+    identification: Optional[str] = Field(
+        default=None, title='Identification',
+        description='Alphanumeric Identification of max 10 characters',
+        max_length=10, regex='^[a-zA-Z0-9]{1,10}$')
+    age: Optional[PositiveInt] = Field(
+        default=None, title='Age', description='Age of the Student',
+        max_digits=2, le=99)
+    magic_affinity: Optional[MagicAffinity] = Field(
+        default=None, title='MagicAffinity',
+        description='Magic affinity of the student')
+
+    class Config:
+        """
+        Config class for StudentUpdate
+        """
+        schema_extra: dict[str, dict] = {
+            "example": {
+                "first_name": "Asta",
+                "last_name": "Staria",
+                "identification": "09zy87xw6v",
+                "age": 15,
+                "magic_affinity": None
+            }
+        }
