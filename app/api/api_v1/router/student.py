@@ -1,5 +1,5 @@
 """
-User API Router
+Student API Router
 """
 from fastapi import APIRouter, BackgroundTasks, Body, HTTPException, status, \
     Response
@@ -9,15 +9,16 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from app.api.deps import CurrentUser
 from app.core.security.exceptions import ServiceException, NotFoundException
-from app.schemas.student import UserResponse, UserCreateResponse, UserCreate, \
-    UserUpdate, UserUpdateResponse
+from app.schemas.student import StudentResponse, StudentCreateResponse, \
+    StudentCreate, \
+    StudentUpdate, StudentUpdateResponse
 from app.services.user import ServiceUser
 from app.utils.utils import send_new_account_email
 
 router: APIRouter = APIRouter(prefix="/users", tags=["users"])
 
 
-@router.get("", response_model=list[UserResponse])
+@router.get("", response_model=list[StudentResponse])
 async def get_users(
         current_user: CurrentUser,
         user_service: ServiceUser,
@@ -25,25 +26,25 @@ async def get_users(
             0, title='Skip', description='Skip users', example=0),
         limit: PositiveInt = Query(
             100, title='Limit', description='Limit pagination', example=100),
-) -> list[UserResponse]:
+) -> list[StudentResponse]:
     """
-    Get all Users basic information from the system using pagination.
+    Get all Students basic information from the system using pagination.
     - `:param skip:` **Offset from where to start returning users**
     - `:type skip:` **NonNegativeInt**
     - `:param limit:` **Limit the number of results from query**
     - `:type limit:` **PositiveInt**
-    - `:return:` **List of Users retrieved from database with id, username,
+    - `:return:` **List of Students retrieved from database with id, username,
      email, first_name, last_name, is_active, is_superuser, created_at,
        updated_at.**
-    - `:rtype:` **list[UserResponse]**
+    - `:rtype:` **list[StudentResponse]**
     \f
     :param user_service: Dependency method for user service layer
-    :type user_service: ServiceUser
+    :type user_service: ServiceStudent
     :param current_user: Dependency method for authorization by current user
-    :type current_user: CurrentUser
+    :type current_user: CurrentStudent
     """
     try:
-        found_users: list[UserResponse] = await user_service.get_users(
+        found_users: list[StudentResponse] = await user_service.get_users(
             skip, limit)
     except ServiceException as serv_exc:
         raise HTTPException(
@@ -51,27 +52,27 @@ async def get_users(
     return found_users
 
 
-@router.post('', response_model=UserCreateResponse,
+@router.post('', response_model=StudentCreateResponse,
              status_code=status.HTTP_201_CREATED)
 async def create_user(
         background_tasks: BackgroundTasks,
         user_service: ServiceUser,
-        user: UserCreate = Body(..., title='New user',
+        user: StudentCreate = Body(..., title='New user',
                                 description='New user to register')
-) -> UserCreateResponse:
+) -> StudentCreateResponse:
     """
     Register new user into the system.
     - `:param user:` **Body Object with username, email, first name,
      last name, password.**
-    - `:type user:` **UserCreate**
-    - `:return:` **User created with its id, username, email, first name
+    - `:type user:` **StudentCreate**
+    - `:return:` **Student created with its id, username, email, first name
      and middle name.**
-    - `:rtype:` **UserCreateResponse**
+    - `:rtype:` **StudentCreateResponse**
     \f
     :param background_tasks: Send email to confirm registration
     :type background_tasks: BackgroundTasks
     :param user_service: Dependency method for user service layer
-    :type user_service: ServiceUser
+    :type user_service: ServiceStudent
     """
     try:
         new_user = await user_service.register_user(user)
@@ -86,25 +87,25 @@ async def create_user(
     return new_user
 
 
-@router.get("/me", response_model=UserResponse)
+@router.get("/me", response_model=StudentResponse)
 async def get_user_me(
         current_user: CurrentUser,
-        user_service: ServiceUser
-) -> UserResponse:
+        user_service: ServiceUser,
+) -> StudentResponse:
     """
     Get current user.
     - `:return:` **Response object for current user with id, username,
      email, first_name, last_name, is_active, is_superuser, created_at,
        updated_at.**
-    - `:rtype:` **UserResponse**
+    - `:rtype:` **StudentResponse**
     \f
     :param current_user: Dependency method for authorization by current user
-    :type current_user: CurrentUser
+    :type current_user: CurrentStudent
     :param user_service: Dependency method for user service layer
-    :type user_service: ServiceUser
+    :type user_service: ServiceStudent
     """
     try:
-        user: UserResponse = await user_service.get_user_by_id(
+        user: StudentResponse = await user_service.get_user_by_id(
             current_user.id)
     except ServiceException as serv_exc:
         raise HTTPException(
@@ -114,14 +115,15 @@ async def get_user_me(
     return user
 
 
-@router.get("/{user_id}", response_model=UserResponse)
+@router.get("/{user_id}", response_model=StudentResponse)
 async def get_user_by_id(
-        user_service: ServiceUser,
         current_user: CurrentUser,
+        user_service: ServiceUser,
         user_id: PositiveInt = Path(
-            ..., title='User ID', description='ID of the User to searched',
+            ..., title='Student ID', description='ID of the Student to '
+                                                 'searched',
             example=1)
-) -> UserResponse:
+) -> StudentResponse:
     """
     Get an existing user from the system given an ID.
     - `:param user_id:` **Unique identifier of the user**
@@ -129,19 +131,19 @@ async def get_user_by_id(
     - `:return:` **Found user with the given ID including its username,
      email, first_name, last_name, is_active, is_superuser, created_at,
        updated_at.**
-    - `:rtype:` **UserResponse**
+    - `:rtype:` **StudentResponse**
     \f
     :param user_service: Dependency method for user service layer
-    :type user_service: ServiceUser
+    :type user_service: ServiceStudent
     :param current_user: Dependency method for authorization by current user
-    :type current_user: CurrentUser
+    :type current_user: CurrentStudent
     """
     try:
-        user: UserResponse = await user_service.get_user_by_id(user_id)
+        user: StudentResponse = await user_service.get_user_by_id(user_id)
     except ServiceException as serv_exc:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
-            detail=f"User with id {user_id} not found in the system."
+            detail=f"Student with id {user_id} not found in the system."
                    f"\n{str(serv_exc)}") from serv_exc
     except NotFoundException as not_found_exc:
         raise HTTPException(
@@ -150,40 +152,41 @@ async def get_user_by_id(
     return user
 
 
-@router.put("/{user_id}", response_model=UserUpdateResponse)
+@router.put("/{user_id}", response_model=StudentUpdateResponse)
 async def update_user(
-        user_service: ServiceUser,
         current_user: CurrentUser,
+        user_service: ServiceUser,
         user_id: PositiveInt = Path(
-            ..., title='User ID', description='ID of the User to searched',
+            ..., title='Student ID', description='ID of the Student to '
+                                                 'searched',
             example=1),
-        user_in: UserUpdate = Body(
-            ..., title='User data', description='New user data to update')
-) -> UserUpdateResponse:
+        user_in: StudentUpdate = Body(
+            ..., title='Student data', description='New user data to update')
+) -> StudentUpdateResponse:
     """
     Update an existing user from the system given an ID and new info.
     - `:param user_id:` **Unique identifier of the user**
     - `:type user_id:` **PositiveInt**
     - `:param user_in:` **New user data to update that can include:
      username, email, first_name, last_name, password.**
-    - `:type user_in:` **UserUpdate**
+    - `:type user_in:` **StudentUpdate**
     - `:return:` **Updated user with the given ID and its username, email,
      first_name, last_name, hashed password, is_active, is_superuser,
        created_at and updated_at.**
-    - `:rtype:` **UserUpdateResponse**
+    - `:rtype:` **StudentUpdateResponse**
     \f
     :param user_service: Dependency method for user service layer
-    :type user_service: ServiceUser
+    :type user_service: ServiceStudent
     :param current_user: Dependency method for authorization by current user
-    :type current_user: CurrentUser
+    :type current_user: CurrentStudent
     """
     try:
-        user: UserUpdateResponse = await user_service.update_user(
+        user: StudentUpdateResponse = await user_service.update_user(
             user_id, user_in)
     except ServiceException as serv_exc:
         raise HTTPException(
             status.HTTP_400_BAD_REQUEST,
-            detail=f"User with id {user_id} not found in the system."
+            detail=f"Student with id {user_id} not found in the system."
                    f"\n{str(serv_exc)}") from serv_exc
 
     return user
@@ -191,10 +194,11 @@ async def update_user(
 
 @router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_user(
-        user_service: ServiceUser,
         current_user: CurrentUser,
+        user_service: ServiceUser,
         user_id: PositiveInt = Path(
-            ..., title='User ID', description='ID of the User to searched',
+            ..., title='Student ID', description='ID of the Student to '
+                                                 'searched',
             example=1)
 ) -> Response:
     """
@@ -205,9 +209,9 @@ async def delete_user(
     - `:rtype:` **Response**
     \f
     :param user_service: Dependency method for user service layer
-    :type user_service: ServiceUser
+    :type user_service: ServiceStudent
     :param current_user: Dependency method for authorization by current user
-    :type current_user: CurrentUser
+    :type current_user: CurrentStudent
     """
     try:
         data: dict = await user_service.delete_user(user_id)

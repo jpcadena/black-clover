@@ -6,12 +6,10 @@ import smtplib
 from email.mime.text import MIMEText
 from pathlib import Path
 from typing import Any, Union
-
 import aiofiles
 from fastapi import Depends
 from jinja2 import Template
 from pydantic import EmailStr
-
 from app.core import config
 from app.core.decorators import with_logging, benchmark
 

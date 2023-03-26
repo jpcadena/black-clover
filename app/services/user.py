@@ -1,20 +1,17 @@
 """
 User Service to handle business logic
 """
-from datetime import datetime
-from typing import Optional, Union, Type, Annotated
-
+from typing import Optional, Type, Annotated
 from fastapi import Depends
-from pydantic import EmailStr, PositiveInt, NonNegativeInt
-
+from pydantic import EmailStr, PositiveInt
 from app.core.security.exceptions import DatabaseException, ServiceException, \
     NotFoundException
 from app.crud.specification import IdSpecification, UsernameSpecification, \
     EmailSpecification
 from app.crud.user import UserRepository, get_user_repository
 from app.models.user import User
-from app.schemas.student import UserSuperCreate, UserCreateResponse, \
-    UserResponse, UserUpdateResponse, UserCreate, UserUpdate
+from app.schemas.user import UserResponse, UserUpdateResponse, UserUpdate, \
+    User as UserCreate
 from app.services import model_to_response
 
 
@@ -109,41 +106,21 @@ class UserService:
         return user_id
 
     async def register_user(
-            self, user: Union[UserCreate, UserSuperCreate]
-    ) -> UserCreateResponse:
+            self, user: UserCreate
+    ) -> UserResponse:
         """
         Create user into the database
         :param user: Request object representing the user
         :type user: UserCreate or UserSuperCreate
         :return: Response object representing the created user in the
          database
-        :rtype: UserCreateResponse or exception
+        :rtype: UserResponse or exception
         """
         try:
             created_user = await self.user_repo.create_user(user)
         except DatabaseException as db_exc:
             raise ServiceException(str(db_exc)) from db_exc
-        return await model_to_response(created_user, UserCreateResponse)
-
-    async def get_users(
-            self, offset: NonNegativeInt, limit: PositiveInt
-    ) -> list[UserResponse]:
-        """
-        Read users information from table
-        :param offset: Offset from where to start returning users
-        :type offset: NonNegativeInt
-        :param limit: Limit the number of results from query
-        :type limit: PositiveInt
-        :return: User information
-        :rtype: UserResponse
-        """
-        try:
-            users: list[User] = await self.user_repo.read_users(offset, limit)
-        except DatabaseException as db_exc:
-            raise ServiceException(str(db_exc)) from db_exc
-        found_users: list[UserResponse] = [
-            await model_to_response(user, UserResponse) for user in users]
-        return found_users
+        return await model_to_response(created_user, UserResponse)
 
     async def update_user(
             self, user_id: PositiveInt, user: UserUpdate
@@ -163,21 +140,6 @@ class UserService:
         except DatabaseException as db_exc:
             raise ServiceException(str(db_exc)) from db_exc
         return await model_to_response(updated_user, UserUpdateResponse)
-
-    async def delete_user(self, user_id: PositiveInt) -> dict:
-        """
-        Deletes a user by its id
-        :param user_id: Unique identifier of the user
-        :type user_id: PositiveInt
-        :return: Data to confirmation info about the delete process
-        :rtype: dict
-        """
-        try:
-            deleted: bool = await self.user_repo.delete_user(
-                IdSpecification(user_id))
-        except DatabaseException as db_exc:
-            raise ServiceException(str(db_exc)) from db_exc
-        return {"ok": deleted, 'deleted_at': datetime.now()}
 
 
 async def get_user_service(

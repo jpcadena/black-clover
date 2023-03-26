@@ -3,14 +3,13 @@ User CRUD script
 """
 import logging
 from datetime import datetime
-from typing import Optional, Union
+from typing import Optional
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import NonNegativeInt, PositiveInt
 from sqlalchemy import ScalarResult, Select, select, Result
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.core.decorators import with_logging, benchmark
 from app.core.security.exceptions import DatabaseException
 from app.core.security.password import get_password_hash
@@ -20,7 +19,7 @@ from app.crud.specification import EmailSpecification, IdSpecification, \
     UsernameSpecification
 from app.db.session import get_session
 from app.models.user import User
-from app.schemas.student import UserCreate, UserSuperCreate, UserUpdate
+from app.schemas.user import User as UserCreate, UserUpdate
 
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -132,12 +131,12 @@ class UserRepository:
     @with_logging
     @benchmark
     async def create_user(
-            self, user: Union[UserCreate, UserSuperCreate],
+            self, user: UserCreate,
     ) -> User:
         """
         Create user into the database
         :param user: Request object representing the user
-        :type user: UserCreate or UserSuperCreate
+        :type user: UserCreate
         :return: Response object representing the created user in the
          database
         :rtype: User
@@ -196,30 +195,6 @@ class UserRepository:
             except DatabaseException as db_exc:
                 raise DatabaseException(str(db_exc)) from db_exc
             return updated_user
-
-    @with_logging
-    @benchmark
-    async def delete_user(self, user_id: IdSpecification) -> bool:
-        """
-        Deletes a user by its id
-        :param user_id: Unique identifier of the user
-        :type user_id: IdSpecification
-        :return: True if the user is deleted; otherwise False
-        :rtype: bool
-        """
-        async with self.session as session:
-            try:
-                found_user: User = await self.read_by_id(user_id)
-            except DatabaseException as db_exc:
-                raise DatabaseException(str(db_exc)) from db_exc
-            try:
-                await session.delete(found_user)
-                await session.commit()
-            except SQLAlchemyError as sa_exc:
-                logger.error(sa_exc)
-                await session.rollback()
-                raise DatabaseException(str(sa_exc)) from sa_exc
-            return True
 
 
 async def get_user_repository() -> UserRepository:

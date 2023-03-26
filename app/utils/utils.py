@@ -8,11 +8,9 @@ import string
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Optional
-
 from fastapi import Depends
 from jose import jwt
 from pydantic import EmailStr, AnyHttpUrl
-
 from app.core import config
 from app.core.decorators import with_logging, benchmark
 from app.utils.email_notifications import read_template_file, send_email

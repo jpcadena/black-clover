@@ -2,10 +2,8 @@
 Metadata script
 """
 import json
-
 import aiofiles
 from fastapi import Depends
-
 from app.core import config
 
 

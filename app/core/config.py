@@ -120,7 +120,7 @@ class Settings(BaseSettings):
     EMAILS_ENABLED: bool
 
     SUPERUSER_EMAIL: EmailStr
-    SUPERUSER_FIRST_NAME: str
+    SUPERUSER_USERNAME: str
     SUPERUSER_PASSWORD: str
 
     REDIS_HOST: str

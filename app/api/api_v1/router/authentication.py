@@ -3,12 +3,10 @@ Login API Router
 """
 import logging
 from typing import Annotated
-
 from aioredis import Redis
 from fastapi import APIRouter, Depends, HTTPException, status, Body, Path
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import EmailStr, PositiveInt
-
 from app.api.deps import redis_dependency, CurrentUser
 from app.core import config
 from app.core.security.exceptions import ServiceException
@@ -17,7 +15,7 @@ from app.models.token import Token
 from app.models.user import User
 from app.schemas.msg import Msg
 from app.schemas.token import TokenResponse, TokenResetPassword
-from app.schemas.student import UserAuth, UserResponse, UserUpdate, \
+from app.schemas.user import UserAuth, UserResponse, UserUpdate, \
     UserUpdateResponse
 from app.services.auth import AuthService
 from app.services.token import TokenService

@@ -1,8 +1,10 @@
 """
 User model script
 """
+from datetime import datetime
 from pydantic import EmailStr, PositiveInt
-from sqlalchemy import Column, Integer, String, CheckConstraint
+from sqlalchemy import Column, Integer, String, CheckConstraint, text, Boolean
+from sqlalchemy.dialects.postgresql import TIMESTAMP
 from app.db.base_class import Base
 from ..core.config import settings
 
@@ -25,6 +27,19 @@ class User(Base):
         comment='Preferred e-mail address of the User')
     password: str = Column(
         String(100), nullable=False, comment='Hashed password of the User')
+    is_active: bool = Column(
+        Boolean(), default=True, nullable=False, server_default=text("true"),
+        comment='True if the user is active; otherwise false')
+    is_superuser: bool = Column(
+        Boolean(), default=False, nullable=False, server_default=text("false"),
+        comment='True if the user is super user; otherwise false')
+    created_at: datetime = Column(
+        TIMESTAMP(timezone=False, precision=settings.TS_PRECISION),
+        default=datetime.now(), nullable=False,
+        server_default=text("now()"), comment='Time the User was created')
+    updated_at: datetime = Column(
+        TIMESTAMP(timezone=False, precision=settings.TS_PRECISION),
+        nullable=True, comment='Time the User was updated')
 
     __table_args__ = (
         CheckConstraint(settings.EMAIL_CONSTRAINT, name='email_format'),

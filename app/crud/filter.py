@@ -4,15 +4,14 @@ Filter script
 import logging
 from abc import ABC, abstractmethod
 from typing import Optional, Union
-
 from pydantic import PositiveInt
 from sqlalchemy import select, Select
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.core.decorators import with_logging, benchmark
 from app.crud.specification import Specification, IdSpecification, \
     UsernameSpecification, EmailSpecification
+from app.models.student import Student
 from app.models.user import User
 
 logger: logging.Logger = logging.getLogger(__name__)
@@ -26,8 +25,8 @@ class Filter(ABC):
     @abstractmethod
     async def filter(
             self, spec: Specification, session: AsyncSession,
-            model: Union[User], field: str
-    ) -> Optional[Union[User]]:
+            model: Union[User, Student], field: str
+    ) -> Optional[Union[User, Student]]:
         """
         Filter method
         :param spec: specification to filter by
@@ -35,11 +34,11 @@ class Filter(ABC):
         :param session: Async Session for Database
         :type session: AsyncSession
         :param model: Datatable model
-        :type model: User, Model or Analysis
+        :type model: User or Student
         :param field: The field for UniqueFilter
         :type field: str
         :return: Datatable model instance
-        :rtype: User, Model or Analysis
+        :rtype: User or Student
         """
 
 
@@ -52,8 +51,8 @@ class IndexFilter(Filter):
     @benchmark
     async def filter(
             self, spec: IdSpecification, session: AsyncSession,
-            model: Union[User], field: str = None
-    ) -> Optional[Union[User]]:
+            model: Union[User, Student], field: str = None
+    ) -> Optional[Union[User, Student]]:
         _id: PositiveInt = spec.value
         async with session as async_session:
             try:

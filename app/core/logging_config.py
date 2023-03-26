@@ -76,7 +76,7 @@ def _setup_file_handler(logger: logging.Logger, log_level: int) -> None:
 
     current_file_directory: str = os.path.dirname(os.path.abspath(__file__))
     project_root: str = current_file_directory
-    while os.path.basename(project_root) != "tweets-classification-backend":
+    while os.path.basename(project_root) != "black-clover":
         project_root = os.path.dirname(project_root)
     current_date: str = datetime.today().strftime('%d-%b-%Y-%H-%M-%S')
     log_filename: str = f'log-{current_date}.log'

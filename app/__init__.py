@@ -1,3 +1,3 @@
 """
-script
+Utils initialization package
 """

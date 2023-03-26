@@ -3,8 +3,8 @@ Student model script
 """
 from datetime import datetime
 from pydantic import PositiveInt
-from sqlalchemy import Boolean, Column, Integer, String, CheckConstraint,\
-    text, Enum, ForeignKey
+from sqlalchemy import Boolean, Column, Integer, String, CheckConstraint, \
+    text, ForeignKey, Enum
 from sqlalchemy.dialects.postgresql import TIMESTAMP
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from app.db.base_class import Base

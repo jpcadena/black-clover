@@ -60,10 +60,41 @@ height="80">
 
 ## About the project
 
+This project is about Black Clover.
 
 ![Project][project-screenshot]
 
-This project is about Black Clover...
+In the Clover Kingdom, The Wizard King requires designing a system for the magic academy; this must perform the registration of the student's request and the random assignment of the Grimoire to him. The level of these Grimoires is categorized by the type of clover on the cover:
+* Sincerity – 1-leaf clover.
+* Hope – 2-leaf clover.
+* Love – 3-leaf clover.
+* Good Fortune - 4-leaf clover.
+* Despair – 5-leaf clover.
+
+Students will have one of the following magic affinities:
+* Darkness
+* Light
+* Fire
+* Water
+* Wind
+* Earth
+
+For this requirement it is required to expose a Rest API, built with the aforementioned tools.
+The endpoints necessary to support the following operations must be exposed:
+* Send application for admission.
+* Update admission application.
+* Update application status.
+* Consult all requests.
+* Consult Grimoire assignments.
+* Delete application for admission.
+
+Once the application is approved, the self-assignment of the Grimoire and the cover must be made.
+Applications for admission must indicate at least the following information of the applicant:
+* Name (only letters, maximum 20 characters).
+* Last name (letters only, maximum 20 characters).
+* Identification (numbers and letters, maximum 10 characters).
+* Age (only numbers, 2 digits).
+* Magical Affinity (mentioned above).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
