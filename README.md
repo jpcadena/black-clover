@@ -61,7 +61,7 @@ height="80">
 ## About the project
 
 
-[![Project][project-screenshot]]
+![Project][project-screenshot]
 
 This project is about Black Clover...
 
@@ -189,8 +189,7 @@ Distributed under the MIT License.
 ## Contact
 
 - [![LinkedIn][LinkedIn]][linkedin-url]
-- [![Outlook][Outlook]](mailto:jpcadena@espol.edu.ec?subject=[GitHub]
-  black-clover)
+- [![Outlook][Outlook]](mailto:jpcadena@espol.edu.ec?subject=[GitHub]black-clover)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
