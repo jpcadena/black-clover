@@ -19,8 +19,6 @@ from app.utils.metadata import read_json_file, write_json_file, \
 
 logger: logging.Logger = logging.getLogger(__name__)
 
-telephone_regex: str = r"\(?\+[0-9]{1,3}\)? ?-?[0-9]{1,3} ?-?[0-9]{3,5}?-?" \
-                       r"[0-9]{4}( ?-?[0-9]{3})? ?(\w{1,10}\s?\d{1,6})?"
 password_regex: str = r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?" \
                       r"[#?!@$%^&*-]).{8,14}$"
 sub_regex: str = r'username:(?!0)\d+'

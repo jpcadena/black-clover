@@ -110,7 +110,6 @@ Applications for admission must indicate at least the following information of t
 * [![jwt][jwt]][jwt-url]
 * [![MJML][mjml]][mjml-url]
 * [![HTML5][html5]][html5-url]
-* [![Pytest][pytest]][pytest-url]
 * [![Pylint][pylint]][pylint-url]
 * [![Pycharm][Pycharm]][Pycharm-url]
 * [![Markdown][Markdown]][Markdown-url]
@@ -253,8 +252,6 @@ Distributed under the MIT License.
 
 [Pylint]: https://img.shields.io/badge/linting-pylint-yellowgreen
 
-[Pytest]: https://img.shields.io/badge/Pytest-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white
-
 [PostgreSQL]: https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white
 
 [html5]: https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white
@@ -282,8 +279,6 @@ Distributed under the MIT License.
 [gunicorn-url]: https://gunicorn.org/
 
 [pylint-url]: https://www.pylint.org/
-
-[pytest-url]: https://docs.pytest.org/en/7.2.x/
 
 [postgresql-url]: https://www.postgresql.org/
 
