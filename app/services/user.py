@@ -40,7 +40,7 @@ class UserService:
         if not user:
             raise NotFoundException(
                 f"User with id {user_id} not found in the system.")
-        user_response: UserResponse = await model_to_response(
+        user_response: Optional[UserResponse] = await model_to_response(
             user, UserResponse)
         return user_response
 
@@ -59,7 +59,9 @@ class UserService:
             raise ServiceException(str(db_exc)) from db_exc
         return user
 
-    async def get_user_by_username(self, username: str) -> UserResponse:
+    async def get_user_by_username(
+            self, username: str
+    ) -> Optional[UserResponse]:
         """
         Get user information with the correct schema for response
         :param username: username to retrieve User from
@@ -107,7 +109,7 @@ class UserService:
 
     async def register_user(
             self, user: UserCreate
-    ) -> UserResponse:
+    ) -> Optional[UserResponse]:
         """
         Create user into the database
         :param user: Request object representing the user

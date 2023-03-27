@@ -61,6 +61,29 @@ class UserCreate(UserPassword, UserBasic):
         }
 
 
+class UserCreateSuper(UserPassword, UserBasic):
+    """
+    User base class that inherits from UserPassword and UserBasic.
+    """
+    is_superuser: bool = Field(
+        default=True, title='Is super user?',
+        description='True if the user is super user; otherwise false')
+
+    class Config:
+        """
+        Config class for User
+        """
+        orm_mode: bool = True
+        schema_extra: dict[str, dict] = {
+            "example": {
+                "username": "username",
+                "email": "example@mail.com",
+                "password": "Hk7pH9*35Fu&3U",
+                "is_superuser": True
+            }
+        }
+
+
 class UserValidation(BaseModel):
     """
     Class for User attributes that are automatically created in the

@@ -3,7 +3,7 @@ Student schema
 """
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, Field, PositiveInt
+from pydantic import BaseModel, Field, PositiveInt, validator
 from app.schemas.grimoire import Grimoire
 from app.schemas.magic_affinity import MagicAffinity
 from app.schemas.user import UserCreate, UserResponse, User, UserCreateResponse
@@ -32,11 +32,23 @@ class StudentBase(BaseModel):
         description='Alphanumeric Identification of max 10 characters',
         max_length=10, regex='^[a-zA-Z0-9]{1,10}$')
     age: PositiveInt = Field(
-        ..., title='Age', description='Age of the Student', max_digits=2,
-        le=99)
+        ..., title='Age', description='Age of the Student')
     magic_affinity: MagicAffinity = Field(
         default=MagicAffinity.LIGHT, title='MagicAffinity',
         description='Magic affinity of the student')
+
+    @validator('age')
+    def validate_age(cls, age: PositiveInt) -> PositiveInt:
+        """
+        Validate age for only two digits maximum
+        :param age: The age of the Student
+        :type age: PositiveInt
+        :return: The age validated or ValueError
+        :rtype: PositiveInt
+        """
+        if age > 99:
+            raise ValueError('Age must be less than or equal to 99')
+        return age
 
 
 class StudentCreate(StudentBase):
@@ -211,11 +223,23 @@ class StudentUpdate(BaseModel):
         description='Alphanumeric Identification of max 10 characters',
         max_length=10, regex='^[a-zA-Z0-9]{1,10}$')
     age: Optional[PositiveInt] = Field(
-        default=None, title='Age', description='Age of the Student',
-        max_digits=2, le=99)
+        default=None, title='Age', description='Age of the Student')
     magic_affinity: Optional[MagicAffinity] = Field(
         default=None, title='MagicAffinity',
         description='Magic affinity of the student')
+
+    @validator('age')
+    def validate_age(cls, age: PositiveInt) -> PositiveInt:
+        """
+        Validate age for only two digits maximum
+        :param age: The age of the Student
+        :type age: PositiveInt
+        :return: The age validated or ValueError
+        :rtype: PositiveInt
+        """
+        if age > 99:
+            raise ValueError('Age must be less than or equal to 99')
+        return age
 
     class Config:
         """

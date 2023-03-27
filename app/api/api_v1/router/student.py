@@ -10,7 +10,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from app.api.deps import CurrentUser
 from app.core.security.exceptions import ServiceException, NotFoundException
 from app.schemas.student import StudentResponse, StudentCreateResponse, \
-    StudentCreate, StudentUpdate, StudentUpdateResponse
+    StudentCreate, StudentUpdate
 from app.services.user import ServiceUser
 from app.utils.utils import send_new_account_email
 
@@ -22,14 +22,14 @@ router: APIRouter = APIRouter(prefix="/students", tags=["students"])
 async def create_user(
         background_tasks: BackgroundTasks,
         student_service: ServiceUser,
-        student: StudentCreate = Body(..., title='New student',
+        student_request: StudentCreate = Body(..., title='New student',
                                 description='New student to register')
 ) -> StudentCreateResponse:
     """
     Register new student into the system.
-    - `:param student:` **Body Object with username, email, first name,
+    - `:param student_request:` **Body Object with username, email, first name,
      last name, password.**
-    - `:type student:` **StudentCreate**
+    - `:type student_request:` **StudentCreate**
     - `:return:` **Student created with its id, username, email, first name
      and middle name.**
     - `:rtype:` **StudentCreateResponse**
@@ -40,16 +40,17 @@ async def create_user(
     :type student_service: ServiceStudent
     """
     try:
-        new_student = await student_service.register_student(student)
+        new_student = await student_service.register_student(student_request)
     except ServiceException as serv_exc:
         raise HTTPException(
             status.HTTP_400_BAD_REQUEST,
             detail=f'Error at creating student.\n{str(serv_exc)}') from \
             serv_exc
     if new_student:
-        if student.email:
+        if student_request.user.email:
             background_tasks.add_task(
-                send_new_account_email, student.email, student.username)
+                send_new_account_email, student_request.user.email,
+                student_request.user.username)
     return new_student
 
 
@@ -167,7 +168,7 @@ async def get_user_by_id(
     return user
 
 
-@router.put("/{user_id}", response_model=StudentUpdateResponse)
+@router.put("/{user_id}", response_model=StudentResponse)
 async def update_user(
         current_user: CurrentUser,
         user_service: ServiceUser,
@@ -177,7 +178,7 @@ async def update_user(
             example=1),
         user_in: StudentUpdate = Body(
             ..., title='Student data', description='New user data to update')
-) -> StudentUpdateResponse:
+) -> StudentResponse:
     """
     Update an existing user from the system given an ID and new info.
     - `:param user_id:` **Unique identifier of the user**
@@ -188,7 +189,7 @@ async def update_user(
     - `:return:` **Updated user with the given ID and its username, email,
      first_name, last_name, hashed password, is_active, is_superuser,
        created_at and updated_at.**
-    - `:rtype:` **StudentUpdateResponse**
+    - `:rtype:` **StudentResponse**
     \f
     :param user_service: Dependency method for user service layer
     :type user_service: ServiceStudent
@@ -196,7 +197,7 @@ async def update_user(
     :type current_user: CurrentStudent
     """
     try:
-        user: StudentUpdateResponse = await user_service.update_user(
+        user: StudentResponse = await user_service.update_user(
             user_id, user_in)
     except ServiceException as serv_exc:
         raise HTTPException(

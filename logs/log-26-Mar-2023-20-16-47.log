@@ -1,0 +1,167 @@
+[main][2023-03-26 20:16:47][INFO][main][startup_event][63]: Starting API...
+[app.core.decorators][2023-03-26 20:16:47][INFO][decorators][wrapper][23]: Calling update_json
+[app.core.decorators][2023-03-26 20:16:47][INFO][decorators][wrapper][46]: Execution of update_json took 4.000012268079445e-07 seconds.
+[app.core.decorators][2023-03-26 20:16:47][INFO][decorators][wrapper][25]: Finished update_json
+[app.utils.utils][2023-03-26 20:16:47][INFO][utils][update_json][235]: Updated OpenAPI JSON file
+[app.core.decorators][2023-03-26 20:16:47][INFO][decorators][wrapper][23]: Calling get_session
+[app.core.decorators][2023-03-26 20:16:47][INFO][decorators][wrapper][46]: Execution of get_session took 5.999991117278114e-07 seconds.
+[app.core.decorators][2023-03-26 20:16:47][INFO][decorators][wrapper][25]: Finished get_session
+[app.core.decorators][2023-03-26 20:16:47][INFO][decorators][wrapper][23]: Calling get_db
+[app.core.decorators][2023-03-26 20:16:47][INFO][decorators][wrapper][25]: Finished get_db
+[app.core.decorators][2023-03-26 20:16:47][INFO][decorators][wrapper][23]: Calling init_db
+[app.core.decorators][2023-03-26 20:16:47][INFO][decorators][wrapper][46]: Execution of init_db took 3.9999940781854093e-07 seconds.
+[app.core.decorators][2023-03-26 20:16:47][INFO][decorators][wrapper][25]: Finished init_db
+[app.core.decorators][2023-03-26 20:16:47][INFO][decorators][wrapper][23]: Calling create_db_and_tables
+[app.core.decorators][2023-03-26 20:16:47][INFO][decorators][wrapper][46]: Execution of create_db_and_tables took 8.000006346264854e-07 seconds.
+[app.core.decorators][2023-03-26 20:16:47][INFO][decorators][wrapper][25]: Finished create_db_and_tables
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: select pg_catalog.version()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [raw sql] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: select current_schema()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [raw sql] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: show standard_conforming_strings
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [raw sql] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_begin_impl][1088]: BEGIN (implicit)
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR(64) COLLATE "C" AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR(64) COLLATE "C"
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [generated in 0.00017s] ('users', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR(64) COLLATE "C" AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR(64) COLLATE "C"
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [cached since 0.004698s ago] ('students', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: 
+DROP TABLE students
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00012s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: 
+DROP TABLE users
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00012s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: SELECT pg_catalog.pg_type.typname 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace 
+WHERE pg_catalog.pg_type.typname = $1::VARCHAR(64) COLLATE "C" AND pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AND pg_catalog.pg_namespace.nspname != $2::VARCHAR(64) COLLATE "C"
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [generated in 0.00018s] ('magicaffinity', 'pg_catalog')
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: DROP TYPE magicaffinity
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00011s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: SELECT pg_catalog.pg_type.typname 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace 
+WHERE pg_catalog.pg_type.typname = $1::VARCHAR(64) COLLATE "C" AND pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AND pg_catalog.pg_namespace.nspname != $2::VARCHAR(64) COLLATE "C"
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [cached since 0.002261s ago] ('grimoire', 'pg_catalog')
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: DROP TYPE grimoire
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00009s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR(64) COLLATE "C" AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR(64) COLLATE "C"
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [cached since 0.01426s ago] ('users', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR(64) COLLATE "C" AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR(64) COLLATE "C"
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [cached since 0.01501s ago] ('students', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: SELECT pg_catalog.pg_type.typname 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace 
+WHERE pg_catalog.pg_type.typname = $1::VARCHAR(64) COLLATE "C" AND pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AND pg_catalog.pg_namespace.nspname != $2::VARCHAR(64) COLLATE "C"
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [cached since 0.00515s ago] ('magicaffinity', 'pg_catalog')
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: CREATE TYPE magicaffinity AS ENUM ('DARKNESS', 'LIGHT', 'FIRE', 'WATER', 'WIND', 'EARTH')
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00010s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: SELECT pg_catalog.pg_type.typname 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace 
+WHERE pg_catalog.pg_type.typname = $1::VARCHAR(64) COLLATE "C" AND pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AND pg_catalog.pg_namespace.nspname != $2::VARCHAR(64) COLLATE "C"
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [cached since 0.00838s ago] ('grimoire', 'pg_catalog')
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: CREATE TYPE grimoire AS ENUM ('SINCERITY', 'HOPE', 'LOVE', 'GOOD_FORTUNE', 'DESPERATION')
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00011s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: 
+CREATE TABLE users (
+	id SERIAL NOT NULL, 
+	username VARCHAR(15) NOT NULL CHECK (char_length(username) >= 4), 
+	email VARCHAR(320) NOT NULL CHECK (char_length(email) >= 3), 
+	password VARCHAR(100) NOT NULL, 
+	is_active BOOLEAN DEFAULT true NOT NULL, 
+	is_superuser BOOLEAN DEFAULT false NOT NULL, 
+	created_at TIMESTAMP(2) WITHOUT TIME ZONE DEFAULT now() NOT NULL, 
+	updated_at TIMESTAMP(2) WITHOUT TIME ZONE, 
+	PRIMARY KEY (id), 
+	CONSTRAINT email_format CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$'), 
+	UNIQUE (username), 
+	UNIQUE (email)
+)
+
+
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00011s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: CREATE UNIQUE INDEX ix_users_id ON users (id)
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00019s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: COMMENT ON COLUMN users.id IS 'ID of the User'
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00013s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: COMMENT ON COLUMN users.username IS 'Username to identify the user'
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00009s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: COMMENT ON COLUMN users.email IS 'Preferred e-mail address of the User'
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00008s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: COMMENT ON COLUMN users.password IS 'Hashed password of the User'
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00010s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: COMMENT ON COLUMN users.is_active IS 'True if the user is active; otherwise false'
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00008s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: COMMENT ON COLUMN users.is_superuser IS 'True if the user is super user; otherwise false'
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00010s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: COMMENT ON COLUMN users.created_at IS 'Time the User was created'
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00008s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: COMMENT ON COLUMN users.updated_at IS 'Time the User was updated'
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00008s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: 
+CREATE TABLE students (
+	id SERIAL NOT NULL, 
+	user_id INTEGER NOT NULL, 
+	first_name VARCHAR(20) NOT NULL, 
+	last_name VARCHAR(20) NOT NULL, 
+	identification VARCHAR(10) NOT NULL, 
+	age INTEGER NOT NULL CHECK (age > 0 AND age <= 99), 
+	magic_affinity magicaffinity NOT NULL, 
+	grimoire grimoire NOT NULL, 
+	created_at TIMESTAMP(2) WITHOUT TIME ZONE DEFAULT now() NOT NULL, 
+	updated_at TIMESTAMP(2) WITHOUT TIME ZONE, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(user_id) REFERENCES users (id)
+)
+
+
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00010s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: CREATE UNIQUE INDEX ix_students_id ON students (id)
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00018s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: CREATE UNIQUE INDEX ix_students_identification ON students (identification)
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00011s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: COMMENT ON COLUMN students.id IS 'ID of the student'
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00017s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: COMMENT ON COLUMN students.user_id IS 'ID of the student'
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00009s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: COMMENT ON COLUMN students.first_name IS 'First name(s) of the student'
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00008s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: COMMENT ON COLUMN students.last_name IS 'Last name(s) of the student'
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00008s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: COMMENT ON COLUMN students.identification IS 'Identification of the student'
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00007s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: COMMENT ON COLUMN students.age IS 'Age of the Student'
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00007s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: COMMENT ON COLUMN students.magic_affinity IS 'Magic affinity of the student'
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00007s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: COMMENT ON COLUMN students.grimoire IS 'Grimoire cover of the student'
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00010s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: COMMENT ON COLUMN students.created_at IS 'Time the student was registered'
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00010s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1896]: COMMENT ON COLUMN students.updated_at IS 'Time the student information was updated'
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_exec_single_context][1901]: [no key 0.00010s] ()
+[sqlalchemy.engine.Engine][2023-03-26 20:16:47][INFO][base][_commit_impl][1132]: COMMIT
+[app.core.decorators][2023-03-26 20:16:47][INFO][decorators][wrapper][23]: Calling create_user
+[app.core.decorators][2023-03-26 20:16:47][INFO][decorators][wrapper][46]: Execution of create_user took 1.5000005078036338e-06 seconds.
+[app.core.decorators][2023-03-26 20:16:47][INFO][decorators][wrapper][25]: Finished create_user
+[passlib.handlers.bcrypt][2023-03-26 20:16:47][DEBUG][bcrypt][_load_backend_mixin][625]: detected 'bcrypt' backend, version '4.0.1'
+[passlib.handlers.bcrypt][2023-03-26 20:16:47][DEBUG][bcrypt][_finalize_backend_mixin][406]: 'bcrypt' backend lacks $2$ support, enabling workaround
+[sqlalchemy.engine.Engine][2023-03-26 20:16:48][INFO][base][_begin_impl][1088]: BEGIN (implicit)
+[sqlalchemy.engine.Engine][2023-03-26 20:16:48][INFO][base][_exec_single_context][1896]: INSERT INTO users (username, email, password, is_active, is_superuser, created_at, updated_at) VALUES ($1::VARCHAR(15), $2::VARCHAR(320), $3::VARCHAR(100), $4::BOOLEAN, $5::BOOLEAN, $6::TIMESTAMP WITHOUT TIME ZONE, $7::TIMESTAMP WITHOUT TIME ZONE) RETURNING users.id
+[sqlalchemy.engine.Engine][2023-03-26 20:16:48][INFO][base][_exec_single_context][1901]: [generated in 0.00024s] ('Admin', 'jpcadena@espol.edu.ec', '$2b$12$NzOeBny42pi.L799htJyEefgPFiA.S3mA8hIaPNXllmmm9bdUDghK', True, True, datetime.datetime(2023, 3, 26, 20, 16, 47, 603281), None)
+[sqlalchemy.engine.Engine][2023-03-26 20:16:48][INFO][base][_commit_impl][1132]: COMMIT
+[app.core.decorators][2023-03-26 20:16:48][INFO][decorators][wrapper][23]: Calling filter
+[app.core.decorators][2023-03-26 20:16:48][INFO][decorators][wrapper][46]: Execution of filter took 1.3000008038943633e-06 seconds.
+[app.core.decorators][2023-03-26 20:16:48][INFO][decorators][wrapper][25]: Finished filter
+[app.crud.filter][2023-03-26 20:16:48][INFO][filter][filter][63]: Retrieving row with id: 1
+[app.db.init_db][2023-03-26 20:16:48][INFO][init_db][init_db][84]: Superuser created with email jpca****@es***.edu.ec
+[app.core.decorators][2023-03-26 20:16:48][INFO][decorators][wrapper][23]: Calling init_auth_db
+[app.core.decorators][2023-03-26 20:16:48][INFO][decorators][wrapper][46]: Execution of init_auth_db took 5.000001692678779e-07 seconds.
+[app.core.decorators][2023-03-26 20:16:48][INFO][decorators][wrapper][25]: Finished init_auth_db
+[app.db.authorization][2023-03-26 20:16:48][INFO][authorization][init_auth_db][31]: Redis Database initialized
+[main][2023-03-26 20:17:09][INFO][main][welcome_message][77]: Salute!

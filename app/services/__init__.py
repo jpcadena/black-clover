@@ -3,13 +3,12 @@ Services initialization package
 """
 from typing import TypeVar, Union, Optional
 from app.models.user import User
-from app.schemas.student import StudentResponse, StudentCreateResponse, \
-    StudentUpdateResponse
+from app.schemas.student import StudentResponse, StudentCreateResponse
 from app.schemas.user import UserResponse, UserUpdateResponse, User as \
     UserCreate
 
 T = TypeVar('T', StudentResponse, StudentCreateResponse, UserCreate,
-            StudentUpdateResponse, UserResponse, UserUpdateResponse)
+            UserResponse, UserUpdateResponse)
 
 
 async def model_to_response(

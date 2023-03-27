@@ -9,17 +9,12 @@ from typing import Any, Optional, Union
 from pydantic import AnyHttpUrl, BaseSettings, EmailStr, PostgresDsn, \
     validator, RedisDsn, root_validator
 
-img_path: Path = Path('./app/assets/images/api-docs.png')
+img_path: Path = Path('./app/assets/static/images/api-docs.png')
 img_b64: str = base64.b64encode(img_path.read_bytes()).decode('utf-8')
-
-users_path: Path = Path('./app/assets/images/users.png')
-users_b64: str = base64.b64encode(users_path.read_bytes()).decode('utf-8')
-analyses_path: Path = Path('./app/assets/images/analyses.png')
-analyses_b64: str = base64.b64encode(analyses_path.read_bytes()).decode(
+students_path: Path = Path('./app/assets/static/images/students.png')
+students_b64: str = base64.b64encode(students_path.read_bytes()).decode(
     'utf-8')
-models_path: Path = Path('./app/assets/images/models.png')
-models_b64: str = base64.b64encode(models_path.read_bytes()).decode('utf-8')
-auth_path: Path = Path('./app/assets/images/auth.png')
+auth_path: Path = Path('./app/assets/static/images/auth.png')
 auth_b64: str = base64.b64encode(auth_path.read_bytes()).decode('utf-8')
 
 
@@ -183,24 +178,11 @@ class Settings(BaseSettings):
         "url": "https://www.apache.org/licenses/LICENSE-2.0.html"}
     TAGS_METADATA: list[dict[str, str]] = [
         {
-            "name": "users",
-            "description": f"""Operations with users, such as register, get,
-             update and delete.\n\n<img src='data:image/png;base64,
-             {users_b64}' width='300' height='200'/>"""
-        },
-        {
-            "name": "analyses",
-            "description": f"""Manage analyses with creation and get a specific
-             analysis on a single or multiple tweets from an specific username.
-             \n\n<img src='data:image/png;base64,{analyses_b64}' width='400'
-              height='200'/>"""
-        },
-        {
-            "name": "models",
-            "description": f"""Manage Machine Learning model with creation and
-             get a specific model performance information.
-             \n\n<img src='data:image/png;base64,{models_b64}' width='500' 
-             height='200'/>"""
+            "name": "students",
+            "description": f"""Manage students requests including creating a
+             new one, get its status, update its status and delete it.
+             \n\n<img src='data:image/png;base64,{students_b64}' width='500'
+              height='500'/>"""
         },
         {
             "name": "auth",

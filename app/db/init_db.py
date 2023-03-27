@@ -2,6 +2,7 @@
 Init DB script
 """
 import logging
+
 from fastapi import Depends
 from sqlalchemy.exc import CompileError, DataError, DatabaseError, \
     DisconnectionError, IntegrityError, InternalError, InvalidatePoolError, \
@@ -9,12 +10,11 @@ from sqlalchemy.exc import CompileError, DataError, DatabaseError, \
 from sqlalchemy.ext.asyncio import AsyncTransaction
 from app.core import config
 from app.core.decorators import benchmark, with_logging
-from app.crud.specification import EmailSpecification
 from app.crud.user import UserRepository, get_user_repository
 from app.db.base_class import Base
 from app.db.session import async_engine
 from app.models.user import User
-from app.schemas.user import User as UserCreate, UserResponse
+from app.schemas.user import UserCreateSuper
 from app.utils.utils import hide_email
 
 logger: logging.Logger = logging.getLogger(__name__)
@@ -71,15 +71,14 @@ async def init_db(
     :rtype: NoneType
     """
     await create_db_and_tables()
-    user: UserResponse = await user_repo.read_by_email(
-        EmailSpecification(settings.SUPERUSER_EMAIL))
-    if not user:
-        user: UserCreate = UserCreate(
-            username=settings.SUPERUSER_USERNAME,
-            email=settings.SUPERUSER_EMAIL,
-            password=settings.SUPERUSER_PASSWORD,
-            is_superuser=True
-        )
-        superuser: User = await user_repo.create_user(user)
-        email: str = await hide_email(superuser.email)
-        logger.info('Superuser created with email %s', email)
+    # user: UserResponse = await user_repo.read_by_email(
+    #     EmailSpecification(settings.SUPERUSER_EMAIL))
+    # if not user:
+    user: UserCreateSuper = UserCreateSuper(
+        username=settings.SUPERUSER_USERNAME,
+        email=settings.SUPERUSER_EMAIL,
+        password=settings.SUPERUSER_PASSWORD
+    )
+    superuser: User = await user_repo.create_user(user)
+    email: str = await hide_email(superuser.email)
+    logger.info('Superuser created with email %s', email)

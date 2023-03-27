@@ -1004,3 +1004,5 @@ orleans.codegen.cs
 
 # Including strong name files can present a security risk
 # (https://github.com/github/gitignore/pull/2483#issue-259490424)
+!/logs/
+!/logs/log-26-Mar-2023-20-16-47.log

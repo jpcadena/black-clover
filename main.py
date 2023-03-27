@@ -2,12 +2,10 @@
 Main script
 """
 import logging
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
-
 from app.api.api_v1.api import api_router
 from app.core import logging_config
 from app.core.config import settings
@@ -49,8 +47,8 @@ if settings.BACKEND_CORS_ORIGINS:
         allow_origins=[str(origin) for origin in
                        settings.BACKEND_CORS_ORIGINS],
         allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
-app.mount('/./app/assets/images', StaticFiles(directory='./app/assets/images'),
-          name='images')
+app.mount('/./app/assets/static/images', StaticFiles(
+    directory='./app/assets/static/images'), name='images')
 
 
 @with_logging

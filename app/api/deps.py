@@ -3,15 +3,13 @@ API v1 Dependencies script
 """
 from abc import ABC
 from typing import Optional, Annotated, Type
-
 from aioredis import Redis
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from pydantic import ValidationError
-
 from app.core import config
-from app.schemas.student import UserAuth
+from app.schemas.user import UserAuth
 from app.services.user import UserService, get_user_service
 
 oauth2_scheme: OAuth2PasswordBearer = OAuth2PasswordBearer(

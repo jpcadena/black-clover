@@ -26,7 +26,7 @@ class Student(Base):
     user_id: Mapped[PositiveInt] = mapped_column(
         Integer, ForeignKey("users.id"), nullable=False,
         comment='ID of the student')
-    user: Mapped[[User]] = relationship(lazy="selectin")
+    user: Mapped[User] = relationship(lazy="selectin")
     first_name: str = Column(
         String(20), nullable=False, comment='First name(s) of the student')
     last_name: str = Column(
