@@ -10,7 +10,9 @@ from app.core.security.exceptions import DatabaseException, ServiceException, \
 from app.crud.specification import IdSpecification
 from app.crud.student import StudentRepository, get_student_repository
 from app.models.student import Student
-from app.schemas.student import StudentResponse, StudentCreate, StudentUpdate
+from app.schemas.grimoire import Grimoire
+from app.schemas.student import StudentResponse, StudentCreate, StudentUpdate, \
+    StudentCreateResponse
 from app.services import model_to_response
 
 
@@ -43,7 +45,26 @@ class StudentService:
             student, StudentResponse)
         return student_response
 
-    async def get_all_students(
+    async def get_grimoire_by_id(
+            self, student_id: PositiveInt) -> Optional[Grimoire]:
+        """
+        Retrieve Grimoire assigned to the student
+        :param student_id: Unique identifier of the student
+        :type student_id: PositiveInt
+        :return: Grimoire assigned to the student
+        :rtype: Grimoire
+        """
+        try:
+            grimoire: Grimoire = await self.student_repo.read_grimoire_by_id(
+                IdSpecification(student_id))
+        except DatabaseException as db_exc:
+            raise ServiceException(str(db_exc)) from db_exc
+        if not grimoire:
+            raise NotFoundException(
+                f"Student with id {student_id} not found in the system.")
+        return grimoire
+
+    async def get_students(
             self, offset: NonNegativeInt, limit: PositiveInt
     ) -> List[StudentResponse]:
         """
@@ -66,20 +87,20 @@ class StudentService:
         return found_students
 
     async def create_student(
-            self, student: StudentCreate) -> Optional[StudentResponse]:
+            self, student: StudentCreate) -> Optional[StudentCreateResponse]:
         """
         Create a new student in the database.
         :param student: Request object representing the student
         :type student: StudentCreate
         :return: Response object representing the created student in the
                  database
-        :rtype: StudentResponse
+        :rtype: StudentCreateResponse
         """
         try:
             created_student = await self.student_repo.create_student(student)
         except DatabaseException as db_exc:
             raise ServiceException(str(db_exc)) from db_exc
-        return await model_to_response(created_student, StudentResponse)
+        return await model_to_response(created_student, StudentCreateResponse)
 
     async def update_student(
             self, student_id: PositiveInt, student: StudentUpdate
@@ -96,6 +117,26 @@ class StudentService:
         try:
             updated_student: Student = await self.student_repo.update_student(
                 IdSpecification(student_id), student)
+        except DatabaseException as db_exc:
+            raise ServiceException(str(db_exc)) from db_exc
+        return await model_to_response(updated_student, StudentResponse)
+
+    async def update_student_status(
+            self, student_id: PositiveInt, is_active: bool
+    ) -> Optional[StudentResponse]:
+        """
+        Update partial to the student request status
+        :param student_id: Unique identifier of the student
+        :type student_id: PositiveInt
+        :param is_active: Student request status
+        :type is_active: bool
+        :return: Student information
+        :rtype: StudentResponse
+        """
+        try:
+            updated_student: Student = await\
+                self.student_repo.update_student_status(
+                    IdSpecification(student_id), is_active)
         except DatabaseException as db_exc:
             raise ServiceException(str(db_exc)) from db_exc
         return await model_to_response(updated_student, StudentResponse)
@@ -129,5 +170,5 @@ async def get_student_service(
     return StudentService(student_repo)
 
 
-ServiceUser: Type[StudentService] = Annotated[
+ServiceStudent: Type[StudentService] = Annotated[
     StudentService, Depends(get_student_service)]

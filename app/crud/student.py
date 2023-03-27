@@ -17,6 +17,7 @@ from app.crud.filter import IndexFilter, UniqueFilter, get_index_filter, \
 from app.crud.specification import IdSpecification
 from app.db.session import get_session
 from app.models.student import Student
+from app.schemas.grimoire import Grimoire
 from app.schemas.student import StudentResponse
 
 logger: logging.Logger = logging.getLogger(__name__)
@@ -34,6 +35,8 @@ class StudentRepository:
         self.unique_filter: UniqueFilter = unique_filter
         self.model: Student = Student
 
+    @with_logging
+    @benchmark
     async def read_by_id(self, _id: IdSpecification) -> Optional[Student]:
         """
         Reads the student by its id
@@ -49,6 +52,26 @@ class StudentRepository:
             except SQLAlchemyError as db_exc:
                 raise DatabaseException(str(db_exc)) from db_exc
             return student
+
+    @with_logging
+    @benchmark
+    async def read_grimoire_by_id(
+            self, _id: IdSpecification
+    ) -> Optional[Grimoire]:
+        """
+        Reads the student by its id
+        :param _id: IdSpecification instance for the student
+        :type _id: IdSpecification
+        :return: Grimoire instance
+        :rtype: Grimoire
+        """
+        async with self.session as session:
+            try:
+                grimoire: Grimoire = await self.index_filter.filter(
+                    _id, session, Grimoire)
+            except SQLAlchemyError as db_exc:
+                raise DatabaseException(str(db_exc)) from db_exc
+            return grimoire
 
     @with_logging
     @benchmark
@@ -131,6 +154,35 @@ class StudentRepository:
                         setattr(found_student, field, update_data[field])
                 if field == 'updated_at':
                     setattr(found_student, field, datetime.utcnow())
+            session.add(found_student)
+            await session.commit()
+            try:
+                updated_student: Student = await self.read_by_id(student_id)
+            except DatabaseException as db_exc:
+                raise DatabaseException(str(db_exc)) from db_exc
+            return updated_student
+
+    @with_logging
+    @benchmark
+    async def update_student_status(
+            self, student_id: IdSpecification, is_active: bool
+    ) -> Optional[Student]:
+        """
+        Update the status of a student request
+        :param student_id: Unique identifier of the student
+        :type student_id: IdSpecification
+        :param is_active: Student request status
+        :type is_active: bool
+        :return: Student information
+        :rtype: Student
+        """
+        async with self.session as session:
+            try:
+                found_student: Student = await self.read_by_id(student_id)
+            except DatabaseException as db_exc:
+                raise DatabaseException(str(db_exc)) from db_exc
+            found_student.user.is_active = is_active
+            found_student.updated_at = datetime.utcnow()
             session.add(found_student)
             await session.commit()
             try:
